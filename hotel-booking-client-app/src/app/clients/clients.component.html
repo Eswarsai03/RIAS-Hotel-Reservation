@@ -1,160 +1,166 @@
 <div class="container" *ngIf="isLoggedIn; else loggedOut">
-  <mat-card class="mat-elevation-z8">
-    <mat-toolbar color="accent" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
-      <div align="center" style="text-align: right;">
-        Client
+  <div class="page-content fade-in">
+    <mat-card class="mat-elevation-z8 content-card">
+      <mat-toolbar color="primary" class="page-header">
+        <span>Client Management</span>
+        <span class="toolbar-spacer"></span>
+        <div class="header-actions">
+          <button mat-raised-button color="warn" *ngIf="selection.hasValue()" (click)="deleteData()">
+            <mat-icon>delete</mat-icon> Delete Selected
+          </button>
+          <button mat-raised-button color="accent" (click)="resetForm()" class="new-button">
+            <mat-icon>add</mat-icon> New Client
+          </button>
+        </div>
+      </mat-toolbar>
+
+      <div class="form-section">
+        <form [formGroup]="form" (ngSubmit)="onFormSubmit()" class="client-form">
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Client Name</mat-label>
+              <input formControlName="name" matInput placeholder="Enter client name">
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="form.get('name').hasError('required')">Name is required</mat-error>
+              <mat-error *ngIf="form.get('name').hasError('minlength')">
+                Minimum {{form.get('name').errors?.['minlength'].requiredLength}} characters
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Telephone</mat-label>
+              <input formControlName="telephone" matInput placeholder="Enter telephone">
+              <mat-icon matSuffix>phone</mat-icon>
+              <mat-error *ngIf="form.get('telephone').hasError('required')">Telephone is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input formControlName="email" type="email" matInput placeholder="Enter email">
+              <mat-icon matSuffix>email</mat-icon>
+              <mat-error *ngIf="form.get('email').hasError('required')">Email is required</mat-error>
+              <mat-error *ngIf="form.get('email').hasError('email')">Please enter a valid email</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Identification</mat-label>
+              <input formControlName="identification" matInput placeholder="Enter ID">
+              <mat-icon matSuffix>badge</mat-icon>
+              <mat-error *ngIf="form.get('identification').hasError('required')">ID is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Address</mat-label>
+              <textarea formControlName="address" matInput rows="3" placeholder="Enter address"></textarea>
+              <mat-icon matSuffix>home</mat-icon>
+              <mat-error *ngIf="form.get('address').hasError('required')">Address is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+              <mat-icon>save</mat-icon> {{idUpdate ? 'Update' : 'Save'}}
+            </button>
+            <button mat-raised-button color="warn" type="button" (click)="resetForm()">
+              <mat-icon>clear</mat-icon> Clear
+            </button>
+          </div>
+        </form>
       </div>
-    </mat-toolbar>
-    <br><br>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
-        <table>
-          <tr>
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <input formControlName="name" matTooltip="Enter Name" matInput placeholder="Name" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <!-- // for debug get all errors with Angular json pipe
-                {{form.get('name').errors | json}}  -->
-                <span *ngIf="!form.get('name').value && form.get('name').touched"></span>
-                <span *ngIf="form.get('name').hasError('minlength')">
-                  Min {{form.get('name').errors.minlength.requiredLength}} characters.
-                </span>
-                <span *ngIf="form.get('name').hasError('pattern')">
-                  Only letters and space.
-                </span>
-              </mat-error>
-            </td>
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <input formControlName="telephone" matTooltip="Enter Telephone" matInput placeholder="Telephone" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!form.get('telephone').value && form.get('telephone').touched"></span>
-                <span *ngIf="form.get('telephone').hasError('pattern')">Need between 10 and 15 digits.</span>
-              </mat-error>
-            </td>
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <input formControlName="email" matTooltip="Enter Email" matInput placeholder="Email" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!form.get('email').value && form.get('email').touched"></span>
-                <span *ngIf="form.get('email').hasError('pattern')">Invalid email.</span>
-              </mat-error>
-            </td>
-          </tr>
-          <tr>
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <input formControlName="address" matTooltip="Enter Address" matInput placeholder="Address" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!form.get('address').value && form.get('address').touched"></span>
-                <span *ngIf="form.get('address').hasError('minlength')">
-                  Minimum {{form.get('address').errors.minlength.requiredLength}} characters.
-                </span>
-              </mat-error>
-            </td>
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <input formControlName="identification" matTooltip="Enter Identification" matInput placeholder="Identification" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!form.get('identification').value && form.get('identification').touched"></span>
-                <span *ngIf="form.get('identification').hasError('pattern')">
-                  Need to be 15 digits.
-                </span>
-              </mat-error>
-            </td>
-          </tr>
-          <tr>
-            <td class="content-center">
-              <button type="submit" mat-raised-button color="accent" matTooltip="Submit" [disabled]="!form.valid">Submit</button>&nbsp;&nbsp;&nbsp;&nbsp;
-              <button type="reset" mat-raised-button color="accent" matTooltip="Reset" (click)="resetForm()">Reset</button>
-            </td>
-            <td>
-              <p *ngIf="dataSaved" style="color:rgb(0, 128, 0);font-size:20px;font-weight:bold" Class="success" align="left">
-                {{massage}}
-              </p>
-            </td>
-            <td></td>
-            <td></td>
-          </tr>
-        </table>
-        <br><br>
-        <b>Search Records :</b> &nbsp;&nbsp;
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Delete Selected Records :</b> &nbsp;&nbsp;
-        <button mat-button type="button" mat-raised-button color="accent" matTooltip="Delete" (click)="deleteData()">Delete</button>
 
-        <div>
-          <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+      <div class="table-section">
+        <div class="table-header">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search Clients</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Type to search...">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
 
-            <!-- Checkbox Column -->
+        <div class="table-container mat-elevation-z2">
+          <table mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="select">
-              <mat-header-cell *matHeaderCellDef>
+              <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? masterToggle() : null"
-                              [checked]="selection.hasValue() && isAllSelected()"
-                              [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
-              </mat-cell>
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-              <mat-cell *matCellDef="let client"> {{client.name}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
             </ng-container>
 
             <ng-container matColumnDef="telephone">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Telephone</mat-header-cell>
-              <mat-cell *matCellDef="let client"> {{client.telephone}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Telephone </th>
+              <td mat-cell *matCellDef="let element"> {{element.telephone}} </td>
             </ng-container>
 
             <ng-container matColumnDef="email">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
-              <mat-cell *matCellDef="let client"> {{client.email}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+              <td mat-cell *matCellDef="let element"> {{element.email}} </td>
             </ng-container>
 
             <ng-container matColumnDef="address">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Address</mat-header-cell>
-              <mat-cell *matCellDef="let client"> {{client.address}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+              <td mat-cell *matCellDef="let element"> {{element.address}} </td>
             </ng-container>
 
             <ng-container matColumnDef="identification">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Identification</mat-header-cell>
-              <mat-cell *matCellDef="let client"> {{client.identification}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+              <td mat-cell *matCellDef="let element"> {{element.identification}} </td>
             </ng-container>
 
             <ng-container matColumnDef="edit">
-              <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
-              <mat-cell *matCellDef="let client">
-                <button mat-button type="button" mat-raised-button color="accent" matTooltip="Edit" (click)="loadToEdit(client.id)">Edit</button>
-              </mat-cell>
+              <th mat-header-cell *matHeaderCellDef> Edit </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="loadToEdit(element.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="delete">
-              <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
-              <mat-cell *matCellDef="let client">
-                <button mat-button type="button" mat-raised-button color="accent" matTooltip="Delete" (click)="delete(client.id)">Delete</button>
-              </mat-cell>
+              <th mat-header-cell *matHeaderCellDef> Delete </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="warn" (click)="delete(element.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                class="table-row"
+                [class.selected-row]="selection.isSelected(row)">
+            </tr>
+          </table>
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+      </div>
+    </mat-card>
+  </div>
 </div>
-<ng-template #loggedOut>You have to login.</ng-template>
+
+<ng-template #loggedOut>
+  <div class="login-prompt">
+    <mat-card class="mat-elevation-z8">
+      <mat-card-content>
+        <h2>Access Denied</h2>
+        <p>Please login to manage clients.</p>
+        <button mat-raised-button color="primary" routerLink="/login">Login</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>

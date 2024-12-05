@@ -1,0 +1,87 @@
+/* Common Card Styles */
+.content-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Table Styles */
+.mat-table {
+  width: 100%;
+  background: transparent;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mat-header-cell {
+  background: var(--primary);
+  color: white;
+  font-weight: 500;
+}
+
+.mat-cell {
+  color: var(--dark);
+}
+
+/* Form Styles */
+.form-container {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+/* Button Styles */
+.action-button {
+  margin: 0.5rem;
+  min-width: 120px;
+}
+
+.primary-button {
+  background: var(--primary);
+  color: white;
+}
+
+.secondary-button {
+  background: var(--secondary);
+  color: white;
+}
+
+/* Dialog Styles */
+.dialog-title {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.dialog-content {
+  padding: 1.5rem;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  margin: 2rem auto;
+  color: var(--accent);
+}
+
+/* Error Messages */
+.error-message {
+  color: var(--danger);
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+}
+
+/* Success Messages */
+.success-message {
+  color: var(--success);
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+} 

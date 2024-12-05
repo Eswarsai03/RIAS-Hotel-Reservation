@@ -1,12 +1,169 @@
-<div class="container" *ngIf="isLoggedIn; else loggedOut">
-  <mat-card class="mat-elevation-z8">
-    <mat-toolbar color="accent" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
-      <div align="center" style="text-align: right;">
-        Home
+<div class="dashboard-container" *ngIf="isLoggedIn; else loggedOut">
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1>Welcome to RIAS Hotel Management</h1>
+      <p class="hero-subtitle">Your Premium Hotel Management Solution</p>
+    </div>
+  </div>
+
+  <div class="stats-section">
+    <div class="stats-container">
+      <div class="stat-box">
+        <mat-icon>hotel</mat-icon>
+        <div class="stat-info">
+          <h3>150+</h3>
+          <p>Luxury Rooms</p>
+        </div>
       </div>
-    </mat-toolbar>
-    <br><br>
-  </mat-card>
+      <div class="stat-box">
+        <mat-icon>group</mat-icon>
+        <div class="stat-info">
+          <h3>1000+</h3>
+          <p>Happy Guests</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <mat-icon>star</mat-icon>
+        <div class="stat-info">
+          <h3>4.8</h3>
+          <p>Average Rating</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <mat-icon>event_available</mat-icon>
+        <div class="stat-info">
+          <h3>95%</h3>
+          <p>Occupancy Rate</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="features-grid">
+    <mat-card class="feature-card" routerLink="/rooms">
+      <div class="feature-icon">
+        <mat-icon>hotel</mat-icon>
+      </div>
+      <h3>Room Management</h3>
+      <p>Efficiently manage all hotel rooms, their status, and maintenance schedules.</p>
+      <ul class="feature-list">
+        <li><mat-icon>check_circle</mat-icon> Real-time room status</li>
+        <li><mat-icon>check_circle</mat-icon> Maintenance tracking</li>
+        <li><mat-icon>check_circle</mat-icon> Inventory management</li>
+      </ul>
+      <button mat-raised-button color="primary">Manage Rooms</button>
+    </mat-card>
+
+    <mat-card class="feature-card" routerLink="/reservations">
+      <div class="feature-icon">
+        <mat-icon>event</mat-icon>
+      </div>
+      <h3>Reservations</h3>
+      <p>Handle bookings and reservations with our streamlined system.</p>
+      <ul class="feature-list">
+        <li><mat-icon>check_circle</mat-icon> Quick booking process</li>
+        <li><mat-icon>check_circle</mat-icon> Calendar integration</li>
+        <li><mat-icon>check_circle</mat-icon> Automated confirmations</li>
+      </ul>
+      <button mat-raised-button color="primary">View Reservations</button>
+    </mat-card>
+
+    <mat-card class="feature-card" routerLink="/clients">
+      <div class="feature-icon">
+        <mat-icon>people</mat-icon>
+      </div>
+      <h3>Client Management</h3>
+      <p>Keep track of guest information and preferences for personalized service.</p>
+      <ul class="feature-list">
+        <li><mat-icon>check_circle</mat-icon> Guest profiles</li>
+        <li><mat-icon>check_circle</mat-icon> Preference tracking</li>
+        <li><mat-icon>check_circle</mat-icon> Loyalty program</li>
+      </ul>
+      <button mat-raised-button color="primary">Manage Clients</button>
+    </mat-card>
+
+    <mat-card class="feature-card" routerLink="/categories">
+      <div class="feature-icon">
+        <mat-icon>category</mat-icon>
+      </div>
+      <h3>Room Categories</h3>
+      <p>Organize and manage different room types and their amenities.</p>
+      <ul class="feature-list">
+        <li><mat-icon>check_circle</mat-icon> Category management</li>
+        <li><mat-icon>check_circle</mat-icon> Pricing control</li>
+        <li><mat-icon>check_circle</mat-icon> Amenity tracking</li>
+      </ul>
+      <button mat-raised-button color="primary">View Categories</button>
+    </mat-card>
+  </div>
+
+  <div class="showcase-section">
+    <h2>Our Premium Accommodations</h2>
+    <div class="showcase-grid">
+      <div class="showcase-card">
+        <img src="assets/images/luxury-room-1.jpg" alt="Luxury Suite">
+        <div class="showcase-content">
+          <h3>Luxury Suite</h3>
+          <p>Experience ultimate comfort in our premium suites</p>
+          <div class="amenities">
+            <span><mat-icon>wifi</mat-icon> Free WiFi</span>
+            <span><mat-icon>ac_unit</mat-icon> AC</span>
+            <span><mat-icon>room_service</mat-icon> Room Service</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-card">
+        <img src="assets/images/luxury-room-2.jpg" alt="Executive Room">
+        <div class="showcase-content">
+          <h3>Executive Room</h3>
+          <p>Perfect for business travelers</p>
+          <div class="amenities">
+            <span><mat-icon>work</mat-icon> Work Desk</span>
+            <span><mat-icon>coffee</mat-icon> Coffee Maker</span>
+            <span><mat-icon>print</mat-icon> Business Center</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-card">
+        <img src="assets/images/luxury-room-3.jpg" alt="Family Suite">
+        <div class="showcase-content">
+          <h3>Family Suite</h3>
+          <p>Spacious comfort for the whole family</p>
+          <div class="amenities">
+            <span><mat-icon>family_restroom</mat-icon> Family Friendly</span>
+            <span><mat-icon>tv</mat-icon> Entertainment</span>
+            <span><mat-icon>restaurant</mat-icon> Dining Area</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<ng-template #loggedOut>You have to login.</ng-template>
+<ng-template #loggedOut>
+  <div class="login-prompt">
+    <mat-card class="mat-elevation-z8">
+      <mat-card-content>
+        <h2>Welcome to RIAS Hotel Management</h2>
+        <p class="lead-text">Your complete solution for hotel operations</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Streamlined Booking Process</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Efficient Room Management</span>
+          </div>
+          <div class="feature-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>Guest Profile Management</span>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" routerLink="/login">Login to Dashboard</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>

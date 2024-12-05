@@ -1,3 +1,356 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/* Modern Color Palette */
+:root {
+  --primary: #0288d1;
+  --primary-light: #5eb8ff;
+  --primary-dark: #005b9f;
+  --secondary: #2e7d32;
+  --secondary-light: #60ad5e;
+  --secondary-dark: #005005;
+  --accent: #00acc1;
+  --success: #43a047;
+  --warning: #fdd835;
+  --danger: #e53935;
+  --light: #f5f8fa;
+  --dark: #1c2833;
+  --white: #ffffff;
+  --gray: #78909c;
+  
+  /* RGB values for opacity */
+  --primary-rgb: 2, 136, 209;
+  --secondary-rgb: 46, 125, 50;
+  --accent-rgb: 0, 172, 193;
+}
+
+/* Global Styles */
+body {
+  background: 
+    linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(0, 150, 136, 0.1) 100%),
+    linear-gradient(45deg, var(--light) 0%, #ffffff 100%);
+  font-family: 'Roboto', sans-serif;
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+/* Enhanced Card Animations */
+.mat-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.mat-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 12px 24px rgba(var(--primary-rgb), 0.15) !important;
+}
+
+/* Enhanced Button Animations */
+.btn, .mat-raised-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover, .mat-raised-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(var(--primary-rgb), 0.2);
+}
+
+.btn::after, .mat-raised-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:active::after, .mat-raised-button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Enhanced Table Styles */
+.mat-table {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.1);
+}
+
+.mat-row {
+  transition: all 0.3s ease;
+}
+
+.mat-row:hover {
+  background: rgba(var(--primary-rgb), 0.05);
+  transform: scale(1.01);
+}
+
+/* Enhanced Form Field Styles */
+.mat-form-field {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mat-form-field:focus-within {
+  transform: scale(1.02);
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--primary);
+}
+
+/* Material Component Overrides */
+.mat-raised-button.mat-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.mat-raised-button.mat-accent {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+}
+
+.mat-toolbar.mat-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+/* Enhanced Animations */
+@keyframes fadeIn {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-in {
+  animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--primary), var(--secondary));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Material Icons Enhancement */
+.mat-icon {
+  transition: all 0.3s ease;
+}
+
+button:hover .mat-icon {
+  transform: scale(1.1);
+}
+
+/* Card Content Enhancement */
+.mat-card-content {
+  padding: 1.5rem;
+}
+
+/* Form Field Focus Effects */
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: var(--primary);
+}
+
+/* Table Header Enhancement */
+.mat-header-cell {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  font-weight: 500;
+  padding: 1rem;
+}
+
+/* Loading Spinner */
+.mat-progress-spinner circle {
+  stroke: var(--primary);
+}
+
+/* Checkbox Enhancement */
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: var(--secondary);
+}
+
+/* Add to your existing styles */
+.content-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(46, 125, 50, 0.1) 100%
+  );
+  min-height: calc(100vh - 100px);
+  margin: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.form-section {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(46, 125, 50, 0.1) 100%
+  );
+}
+
+.table-container {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(46, 125, 50, 0.05) 100%
+  );
+}
+
+/* Enhanced page transitions */
+.page-content {
+  animation: pageTransition 0.5s ease-out;
+}
+
+@keyframes pageTransition {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add decorative elements */
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+/* Enhanced button styles */
+.mat-raised-button.mat-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.mat-raised-button.mat-accent {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+}
+
+/* Add green tint to the background */
+body {
+  background: 
+    linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(0, 150, 136, 0.1) 100%),
+    linear-gradient(45deg, var(--light) 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+/* Enhanced table styles */
+.mat-header-cell {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  font-weight: 500;
+}
+
+/* Card hover effects */
+.mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 12px 24px rgba(var(--primary-rgb), 0.1),
+    0 8px 16px rgba(var(--secondary-rgb), 0.1);
+}
+
+/* Form field enhancements */
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95));
+  border-radius: 5px;
+}
+
+/* Add these new utility classes */
+.green-gradient-bg {
+  background: linear-gradient(135deg, var(--secondary-light) 0%, var(--secondary) 100%);
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.full-height {
+  min-height: calc(100vh - 64px);
+}
+
+/* Enhanced scrollbar */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--primary), var(--secondary));
+  border-radius: 10px;
+}
+
+/* Add subtle patterns */
+.pattern-bg {
+  background-image: 
+    linear-gradient(135deg, rgba(46, 125, 50, 0.1) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(46, 125, 50, 0.1) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(46, 125, 50, 0.1) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(46, 125, 50, 0.1) 25%, transparent 25%);
+  background-position: 10px 0, 10px 0, 0 0, 0 0;
+  background-size: 20px 20px;
+  background-repeat: repeat;
+}

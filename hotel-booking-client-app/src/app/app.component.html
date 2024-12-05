@@ -1,46 +1,87 @@
 <div id="app">
-  <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a href="#" class="navbar-brand">Hotel Booking</a>
-    <ul class="navbar-nav mr-auto" routerLinkActive="active">
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a href="/home" class="nav-link" routerLink="home">Home</a>
-      </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a href="/reservations" class="nav-link" routerLink="reservations">Reservations</a>
-      </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a href="/rooms" class="nav-link" routerLink="rooms">Rooms</a>
-      </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a href="/clients" class="nav-link" routerLink="clients">Clients</a>
-      </li>
-      <li class="nav-item" *ngIf="isLoggedIn">
-        <a href="/categories" class="nav-link" routerLink="categories">Categories</a>
-      </li>
-    </ul>
+  <nav class="navbar navbar-expand navbar-dark">
+    <div class="navbar-brand-container">
+      <a href="#" class="navbar-brand">
+        <div class="logo-container">
+          <span class="logo-text">RIAS</span>
+          <mat-icon class="brand-icon">hotel</mat-icon>
+        </div>
+        <span class="brand-divider">|</span>
+        <span class="brand-text">Hotel Management</span>
+      </a>
+    </div>
 
-    <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
-      <li class="nav-item">
-        <a href="/register" class="nav-link" routerLink="register">Sign up</a>
-      </li>
-      <li class="nav-item">
-        <a href="/login" class="nav-link" routerLink="login">Login</a>
-      </li>
-    </ul>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
-      <li class="nav-item">
-        <a href="/profile" class="nav-link" routerLink="profile">{{
-          userName
-        }}</a>
-      </li>
-      <li class="nav-item">
-        <a href class="nav-link" (click)="logout()">Logout</a>
-      </li>
-    </ul>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav mr-auto" routerLinkActive="active">
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="/home" class="nav-link" routerLink="home">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="/reservations" class="nav-link" routerLink="reservations">
+            <mat-icon>event</mat-icon>
+            <span>Reservations</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="/rooms" class="nav-link" routerLink="rooms">
+            <mat-icon>hotel</mat-icon>
+            <span>Rooms</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="/clients" class="nav-link" routerLink="clients">
+            <mat-icon>people</mat-icon>
+            <span>Clients</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="/categories" class="nav-link" routerLink="categories">
+            <mat-icon>category</mat-icon>
+            <span>Categories</span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
+        <li class="nav-item">
+          <a href="/register" class="nav-link" routerLink="register">
+            <mat-icon>person_add</mat-icon>
+            <span>Sign up</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/login" class="nav-link" routerLink="login">
+            <mat-icon>login</mat-icon>
+            <span>Login</span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
+        <li class="nav-item">
+          <span class="nav-link user-info">
+            <mat-icon>person</mat-icon>
+            <span>{{userName}}</span>
+          </span>
+        </li>
+        <li class="nav-item">
+          <a href="javascript:void(0)" class="nav-link logout-link" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </nav>
 
-  <div class="container">
+  <div class="content-container">
     <router-outlet></router-outlet>
   </div>
 </div>

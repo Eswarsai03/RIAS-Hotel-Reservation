@@ -1,118 +1,128 @@
 <div class="container" *ngIf="isLoggedIn; else loggedOut">
-  <mat-card class="mat-elevation-z8">
-    <mat-toolbar color="accent" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
-      <div align="center" style="text-align: right;">
-        Category
-      </div>
-    </mat-toolbar>
-    <br><br>
+  <div class="page-content fade-in">
+    <mat-card class="mat-elevation-z8 content-card">
+      <mat-toolbar color="primary" class="page-header">
+        <span>Category Management</span>
+        <span class="toolbar-spacer"></span>
+        <div class="header-actions">
+          <button mat-raised-button color="warn" *ngIf="selection.hasValue()" (click)="deleteData()">
+            <mat-icon>delete</mat-icon> Delete Selected
+          </button>
+          <button mat-raised-button color="accent" (click)="resetForm()" class="new-button">
+            <mat-icon>add</mat-icon> New Category
+          </button>
+        </div>
+      </mat-toolbar>
 
-    {{ errorMessage }}
-    <mat-card-content>
-      <form [formGroup]="categoryForm" (ngSubmit)="onFormSubmit()">
-        <table>
-          <tr>
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <input formControlName="name" matTooltip="Enter category Name" matInput placeholder="Name" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!categoryForm.get('name').value && categoryForm.get('name').touched"></span>
-                <span *ngIf="categoryForm.get('name').hasError('minlength')">
-                    Minimum {{categoryForm.get('name').errors.minlength.requiredLength}} characters.
-                </span>
-               </mat-error>
-            </td>
-
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <!--<input formControlName="price" matTooltip="Enter Price" matInput placeholder="Price" autocomplete="off"> -->
-                <input formControlName="price" type="number" matTooltip="Enter Price" matInput placeholder="Price" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <!-- // for debug get all errors with Angular json pipe
-                {{categoryForm.get('price').errors | json}} -->
-                <span *ngIf="!categoryForm.get('price').value && categoryForm.get('price').touched"></span>
-                <span *ngIf="categoryForm.get('price').hasError('min')">Minimum value is {{categoryForm.get('price').errors.min.min}}.</span>
+      <div class="form-section">
+        <form [formGroup]="categoryForm" (ngSubmit)="onFormSubmit()" class="category-form">
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Category Name</mat-label>
+              <input formControlName="name" matInput placeholder="Enter category name">
+              <mat-icon matSuffix>category</mat-icon>
+              <mat-error *ngIf="categoryForm.get('name').hasError('required')">Name is required</mat-error>
+              <mat-error *ngIf="categoryForm.get('name').hasError('minlength')">
+                Minimum {{categoryForm.get('name').errors?.['minlength'].requiredLength}} characters
               </mat-error>
-            </td>
-          </tr>
+            </mat-form-field>
 
-          <tr>
-            <td class="content-center">
-              <button type="submit" mat-raised-button color="accent" matTooltip="Submit" [disabled]="!categoryForm.valid">Submit</button>&nbsp;&nbsp;&nbsp;&nbsp;
-              <button type="reset" mat-raised-button color="accent" matTooltip="Reset" (click)="resetForm()">Reset</button>
-            </td>
-            <td>
-              <p *ngIf="dataSaved" style="color:rgb(0, 128, 0);font-size:20px;font-weight:bold" Class="success" align="left">
-                {{massage}}
-              </p>
-            </td>
-            <td></td>
-            <td></td>
-          </tr>
-        </table>
-        <br><br>
+            <mat-form-field appearance="outline">
+              <mat-label>Price</mat-label>
+              <input formControlName="price" type="number" matInput placeholder="Enter price">
+              <mat-icon matSuffix>attach_money</mat-icon>
+              <mat-error *ngIf="categoryForm.get('price').hasError('required')">Price is required</mat-error>
+              <mat-error *ngIf="categoryForm.get('price').hasError('min')">Price must be greater than 0</mat-error>
+            </mat-form-field>
+          </div>
 
-        <b>Search Records :</b> &nbsp;&nbsp;
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" #input>
-        </mat-form-field>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Delete Selected Records :</b> &nbsp;&nbsp;
-        <button mat-button type="button" mat-raised-button color="accent" matTooltip="Delete" (click)="deleteData()">Delete</button>
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!categoryForm.valid">
+              <mat-icon>save</mat-icon> {{categoryIdUpdate ? 'Update' : 'Save'}}
+            </button>
+            <button mat-raised-button color="warn" type="button" (click)="resetForm()">
+              <mat-icon>clear</mat-icon> Clear
+            </button>
+          </div>
+        </form>
+      </div>
 
-        <div>
-          <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+      <div class="table-section">
+        <div class="table-header">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search Categories</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Type to search...">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
 
-            <!-- Checkbox Column -->
+        <div class="table-container mat-elevation-z2">
+          <table mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="select">
-              <mat-header-cell *matHeaderCellDef>
+              <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? masterToggle() : null"
-                              [checked]="selection.hasValue() && isAllSelected()"
-                              [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
-              </mat-cell>
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-              <mat-cell *matCellDef="let category"> {{category.name}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
             </ng-container>
 
             <ng-container matColumnDef="price">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Price</mat-header-cell>
-              <mat-cell *matCellDef="let category"> {{category.price}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+              <td mat-cell *matCellDef="let element"> {{element.price | currency}} </td>
             </ng-container>
 
             <ng-container matColumnDef="edit">
-              <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
-              <mat-cell *matCellDef="let category">
-                <button mat-button type="button" mat-raised-button color="accent" matTooltip="Edit" (click)="loadCategoryToEdit(category.id)">Edit</button>
-              </mat-cell>
+              <th mat-header-cell *matHeaderCellDef> Edit </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="loadCategoryToEdit(element.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="delete">
-              <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
-              <mat-cell *matCellDef="let category">
-                <button mat-button type="button" mat-raised-button color="accent" matTooltip="Delete" (click)="deleteCategory(category.id)">Delete</button>
-              </mat-cell>
+              <th mat-header-cell *matHeaderCellDef> Delete </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="warn" (click)="deleteCategory(element.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                class="table-row"
+                [class.selected-row]="selection.isSelected(row)">
+            </tr>
+          </table>
 
-          </mat-table>
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-
         </div>
-
-      </form>
-    </mat-card-content>
-  </mat-card>
-
+      </div>
+    </mat-card>
+  </div>
 </div>
-<ng-template #loggedOut>You have to login.</ng-template>
+
+<ng-template #loggedOut>
+  <div class="login-prompt">
+    <mat-card class="mat-elevation-z8">
+      <mat-card-content>
+        <h2>Access Denied</h2>
+        <p>Please login to manage categories.</p>
+        <button mat-raised-button color="primary" routerLink="/login">Login</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>

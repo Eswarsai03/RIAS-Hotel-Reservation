@@ -1,164 +1,171 @@
 <div class="container" *ngIf="isLoggedIn; else loggedOut">
-  <mat-card class="mat-elevation-z8">
-    <mat-toolbar color="accent" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
-      <div align="center" style="text-align: right;">
-        Reservations
+  <div class="page-content fade-in">
+    <mat-card class="mat-elevation-z8 content-card">
+      <mat-toolbar color="primary" class="page-header">
+        <span>Reservation Management</span>
+        <span class="toolbar-spacer"></span>
+        <div class="header-actions">
+          <button mat-raised-button color="warn" *ngIf="selection.hasValue()" (click)="deleteData()">
+            <mat-icon>delete</mat-icon> Delete Selected
+          </button>
+          <button mat-raised-button color="accent" (click)="resetForm()" class="new-button">
+            <mat-icon>add</mat-icon> New Reservation
+          </button>
+        </div>
+      </mat-toolbar>
+
+      <div class="form-section">
+        <form [formGroup]="form" (ngSubmit)="onFormSubmit()" class="reservation-form">
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Client</mat-label>
+              <mat-select formControlName="client_id" matTooltip="Select Client">
+                <mat-option *ngFor="let client of (allClients | async)" [value]="client.id">
+                  {{client.name}}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="form.get('client_id').hasError('required')">Client is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Room</mat-label>
+              <mat-select formControlName="room_id" matTooltip="Select Room">
+                <mat-option *ngFor="let room of (allRooms | async)" [value]="room.id">
+                  {{room.name}}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>hotel</mat-icon>
+              <mat-error *ngIf="form.get('room_id').hasError('required')">Room is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Check-in Date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Choose date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="form.get('date').hasError('required')">Date is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Number of Days</mat-label>
+              <input formControlName="no_days" type="number" matInput placeholder="Enter number of days">
+              <mat-icon matSuffix>schedule</mat-icon>
+              <mat-error *ngIf="form.get('no_days').hasError('required')">Number of days is required</mat-error>
+              <mat-error *ngIf="form.get('no_days').hasError('min')">Minimum 1 day required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Number of Persons</mat-label>
+              <input formControlName="no_persons" type="number" matInput placeholder="Enter number of persons">
+              <mat-icon matSuffix>group</mat-icon>
+              <mat-error *ngIf="form.get('no_persons').hasError('required')">Number of persons is required</mat-error>
+              <mat-error *ngIf="form.get('no_persons').hasError('min')">Minimum 1 person required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+              <mat-icon>save</mat-icon> {{idUpdate ? 'Update' : 'Save'}}
+            </button>
+            <button mat-raised-button color="warn" type="button" (click)="resetForm()">
+              <mat-icon>clear</mat-icon> Clear
+            </button>
+          </div>
+        </form>
       </div>
-    </mat-toolbar>
-    <br><br>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
-        <table>
-          <tr>
-            <td class="tbl1">
-              <mat-form-field>
-                <mat-label>Client</mat-label>
-                <mat-select formControlName="client_id" matTooltip="Select Client" autocomplete="off">
-                  <mat-option *ngFor="let client of (allClients | async)" [value]="client.id">
-                    {{client.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!form.get('client_id').value && form.get('client_id').touched">Choose Client.</span>
-              </mat-error>
-            </td>
-            <td class="tbl1">
-              <mat-form-field>
-                <mat-label>Room</mat-label>
-                <mat-select formControlName="room_id" matTooltip="Select Room" autocomplete="off">
-                  <mat-option *ngFor="let room of (allRooms | async)" [value]="room.id">
-                    {{room.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!form.get('room_id').value && form.get('room_id').touched">Choose Room.</span>
-              </mat-error>
-            </td>
-          </tr>
-          <tr>
-            <td class="tbl1">
-              <mat-form-field appearance="fill" class="example-full-width">
-                <mat-label>Choose a date</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="date" matTooltip="Enter Date" placeholder="Date" autocomplete="off">
-                <mat-hint>MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
 
-              <mat-error>
-                <span *ngIf="!form.get('date').value && form.get('date').touched"></span>
-                <span *ngIf="form.get('date').hasError('min')">Date invalid {{form.get('date').errors.min.min}}.</span>
-              </mat-error>
-            </td>
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <input formControlName="no_days" type="number" matTooltip="Enter No Days" matInput placeholder="No Days" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!form.get('no_days').value && form.get('no_days').touched"></span>
-                <span *ngIf="form.get('no_days').hasError('min')">Minim is {{form.get('no_days').errors.min.min}}.</span>
-              </mat-error>
-            </td>
-            <td class="tbl1">
-              <mat-form-field class="example-full-width">
-                <input formControlName="no_persons" type="number" matTooltip="Enter No Persons" matInput placeholder="No Persons" autocomplete="off">
-              </mat-form-field>
-              <mat-error>
-                <span *ngIf="!form.get('no_persons').value && form.get('no_persons').touched"></span>
-                <span *ngIf="form.get('no_persons').hasError('min')">Minim is {{form.get('no_persons').errors.min.min}}.</span>
-              </mat-error>
-            </td>
-          </tr>
-          <tr>
-            <td class="content-center">
-              <button type="submit" mat-raised-button color="accent" matTooltip="Submit" [disabled]="!form.valid">Submit</button>&nbsp;&nbsp;&nbsp;&nbsp;
-              <button type="reset" mat-raised-button color="accent" matTooltip="Reset" (click)="resetForm()">Reset</button>
-            </td>
-            <td>
-              <p *ngIf="dataSaved" style="color:rgb(0, 128, 0);font-size:20px;font-weight:bold" Class="success" align="left">
-                {{massage}}
-              </p>
-            </td>
-            <td></td>
-            <td></td>
-          </tr>
-        </table>
-        <br><br>
-        <b>Search Records :</b> &nbsp;&nbsp;
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Delete Selected Records :</b> &nbsp;&nbsp;
-        <button mat-button type="button" mat-raised-button color="accent" matTooltip="Delete" (click)="deleteData()">Delete</button>
+      <div class="table-section">
+        <div class="table-header">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search Reservations</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Type to search...">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
 
-        <div>
-          <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
-
-            <!-- Checkbox Column -->
+        <div class="table-container mat-elevation-z2">
+          <table mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="select">
-              <mat-header-cell *matHeaderCellDef>
+              <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? masterToggle() : null"
-                              [checked]="selection.hasValue() && isAllSelected()"
-                              [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
-              </mat-cell>
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="client_name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Client</mat-header-cell>
-              <mat-cell *matCellDef="let reservation"> {{reservation.client_name}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Client </th>
+              <td mat-cell *matCellDef="let element"> {{element.client_name}} </td>
             </ng-container>
 
             <ng-container matColumnDef="room_name">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Room</mat-header-cell>
-              <mat-cell *matCellDef="let reservation"> {{reservation.room_name}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Room </th>
+              <td mat-cell *matCellDef="let element"> {{element.room_name}} </td>
             </ng-container>
 
             <ng-container matColumnDef="date">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>From Date</mat-header-cell>
-              <mat-cell *matCellDef="let reservation"> {{ reservation.date | date: 'dd-MM-yyyy' }} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Check-in Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.date | date}} </td>
             </ng-container>
 
             <ng-container matColumnDef="no_days">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>To Date</mat-header-cell>
-              <mat-cell *matCellDef="let reservation">
-                {{ moment(reservation.date).add(reservation.no_days, 'days').format('DD-MM-YYYY') }}
-              </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Days </th>
+              <td mat-cell *matCellDef="let element"> {{element.no_days}} </td>
             </ng-container>
 
             <ng-container matColumnDef="no_persons">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>No Persons</mat-header-cell>
-              <mat-cell *matCellDef="let reservation">{{reservation.no_persons}}</mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Persons </th>
+              <td mat-cell *matCellDef="let element"> {{element.no_persons}} </td>
             </ng-container>
 
             <ng-container matColumnDef="edit">
-              <mat-header-cell *matHeaderCellDef>Edit</mat-header-cell>
-              <mat-cell *matCellDef="let room">
-                <button mat-button type="button" mat-raised-button color="accent" matTooltip="Edit" (click)="loadToEdit(room.id)">Edit</button>
-              </mat-cell>
+              <th mat-header-cell *matHeaderCellDef> Edit </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="loadToEdit(element.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="delete">
-              <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
-              <mat-cell *matCellDef="let room">
-                <button mat-button type="button" mat-raised-button color="accent" matTooltip="Delete" (click)="delete(room.id)">Delete</button>
-              </mat-cell>
+              <th mat-header-cell *matHeaderCellDef> Delete </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="warn" (click)="delete(element.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                class="table-row"
+                [class.selected-row]="selection.isSelected(row)">
+            </tr>
+          </table>
 
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+      </div>
+    </mat-card>
+  </div>
 </div>
-<ng-template #loggedOut>You have to login.</ng-template>
+
+<ng-template #loggedOut>
+  <div class="login-prompt">
+    <mat-card class="mat-elevation-z8">
+      <mat-card-content>
+        <h2>Access Denied</h2>
+        <p>Please login to manage reservations.</p>
+        <button mat-raised-button color="primary" routerLink="/login">Login</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>
